@@ -1,0 +1,100 @@
+//---------------------------------------------------------------------------------------------------------------------
+//
+// VISTEON CORPORATION CONFIDENTIAL
+// ________________________________
+//
+// [2016] Visteon Corporation
+// All Rights Reserved.
+//
+// NOTICE: This is an unpublished work of authorship, which contains trade secrets.
+// Visteon Corporation owns all rights to this work and intends to maintain it in confidence to preserve
+// its trade secret status. Visteon Corporation reserves the right, under the copyright laws of the United States
+// or those of any other country that may have jurisdiction, to protect this work as an unpublished work,
+// in the event of an inadvertent or deliberate unauthorized publication. Visteon Corporation also reserves its rights
+// under all copyright laws to protect this work as a published work, when appropriate.
+// Those having access to this work may not copy it, use it, modify it, or disclose the information contained in it
+// without the written authorization of Visteon Corporation.
+//
+//---------------------------------------------------------------------------------------------------------------------
+
+/*!*************************************************************************************************
+   @file TmExt_Cfg.$h
+   @brief Timer Extension Configuration Parameters.
+***************************************************************************************************/
+
+#ifndef TMEXT_CFG_H
+#define TMEXT_CFG_H
+
+/***************************************************************************************************
+*    P U B L I C   M A C R O  D E F I N I T I O N S                                                *
+***************************************************************************************************/
+
+//User has to configure the 16bit & 32bit timers list in the "HTimer" data type in DaVinci.
+//user has to also update the total number of 16bit timers count in the configuration parameter "eMaxNumof16BitTimers" in DaVinci
+//Also user needs to update the total timers count in the configuration parameter "eTimerMax" in DaVinci.
+
+//User could configure maximum of 100timers only
+
+/**
+* @brief Periodicity of TmExt MainFunction in milliseconds
+*/
+#define TMEXT_MAINFUNCTION_PERIODICITY   10
+
+//----------------------------------------------------------------------------------------------------------------------
+// UML::TPulseClientId
+//----------------------------------------------------------------------------------------------------------------------
+#define eClientUnitTest1        ((TPulseClientId) 0)
+#define eClientUnitTest2        ((TPulseClientId) 1)
+#define eClientUnitTest3        ((TPulseClientId) 2)
+#define eClientUnitTest4        ((TPulseClientId) 3)
+#define eClientGdtCtrl        ((TPulseClientId) 4)
+#define eClientSndView        ((TPulseClientId) 5)
+#define eClientTtView        ((TPulseClientId) 6)
+#define eClientCount        ((TPulseClientId) 7)
+
+//----------------------------------------------------------------------------------------------------------------------
+// UML::TPulseChannelId
+//----------------------------------------------------------------------------------------------------------------------
+#define ePulseChannelTestChannel0        ((TPulseChannelId) 0 )
+#define ePulseChannelTestChannel1        ((TPulseChannelId) 1 )
+#define ePulseChannelTestChannel2        ((TPulseChannelId) 2 )
+#define ePulseChannelTestChannel3        ((TPulseChannelId) 3 )
+#define ePulseChannelChnl1Hz        ((TPulseChannelId) 4 )
+#define ePulseChannelCount        ((TPulseChannelId) 5)
+
+/**
+* @brief Os Interface for getting the system timer value in milliseconds
+*/
+#define GET_SYSTEM_TIMER(Value) 			(void)GetCounterValue(SystemTimer,(Value))
+
+/**
+* @brief GPT Free Running Timer channel ID
+*/
+//Timer configured at 60 MHZ
+#define cGPT_TIMER 					GptConf_GptChannelConfiguration_GptChCfg_60MHzFRT
+
+/**
+* @brief Timer Rollover or max count value
+*/
+#define cTIMER_ROLLOVER_VALUE 		0xFFFFFFFFUL
+
+/**
+* @brief Timer Resolution - Shift to obtain the resolution of 60MHz timer - 16 ns: shift with 4 bits
+*/
+//
+#define cTIMER_RESOLUTION_MIN  		4u
+
+/**
+* @brief 	GPT FRT Timer callback notification.
+*/
+void TmExt_UpdateFreeRunningCounter( void );
+
+#endif  // TMEXT_CFG_H
+
+/*---------------------------------------------------------------------------
+Date              : 11-May-2018
+CDSID             : asivalin
+Traceability      : RTC-1109220, 1199221, 1116707, 1116694
+Change Description: Timer Elapsed Defectes Fix & QAC, Coverity Warnings Fix and doxygen documentation.
+Version           : 3:turing_bsw_tmext_0.2
+-----------------------------------------------------------------------------*/

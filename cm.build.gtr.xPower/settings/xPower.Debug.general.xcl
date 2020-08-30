@@ -1,0 +1,13 @@
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.1\arm\bin\armproc.dll" 
+
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.1\arm\bin\armjlink2.dll" 
+
+"D:\stm32-g474\cm.build.gtr.xPower\Debug\Exe\xPower.out" 
+
+--plugin="C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.1\arm\bin\armbat.dll" 
+
+--flash_loader="C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.1\arm\config\flashloader\ST\FlashSTM32G4xxxE.board" 
+
+
+
+
