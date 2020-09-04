@@ -1,0 +1,1419 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="Author" content="Ernst van der Pols">
+<meta name="Description"
+content="User Manual of Binex - a binary to hex vv conversion program.">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>Binex - NewLife Software</title>
+</head>
+
+<body bgcolor="#F8F7D8" text="#000000">
+
+<h1 align="center">BINEX</h1>
+
+<h3 align="center">A conversion program for binary and
+hexadecimal embedded software data.</h3>
+
+<p align="center"><img src="binex.gif" alt="Binex" align="middle"
+width="150" height="150"></p>
+
+<h3 align="center">NewLife Software</h3>
+
+<p align="center"><a href="#INTRODUCTION"><font size="2">INTRODUCTION</font></a><font
+size="2"> | </font><a href="#NEW"><font size="2">NEW</font></a><font
+size="2"> | </font><a href="#INSTALLATION"><font size="2">INSTALLATION</font></a><font
+size="2"> | </font><a href="#USAGE"><font size="2">USAGE</font></a><font
+size="2"> | </font><a href="#EXAMPLE"><font size="2">EXAMPLE</font></a><font
+size="2"> | </font><a href="#FORMATS"><font size="2">FORMATS</font></a><font
+size="2"> | </font><a href="#MESSAGES"><font size="2">MESSAGES</font></a><font
+size="2"> | </font><a href="#GLOSSARY"><font size="2">GLOSSARY</font></a><font
+size="2"> | </font><a href="#COLOPHON"><font size="2">COLOPHON</font></a></p>
+
+<p align="center">Copyright ® 1990-1999 E.K.H. van der Pols,
+Zuidland, Nederland</p>
+
+<hr noshade>
+
+<h2><a name="INTRODUCTION">INTRODUCTION</a></h2>
+
+<p>Binex is a symbolic conversion program for binary and
+hexadecimal encoded absolute-addressed <a href="#FORMATS">data
+files</a>, that are regularly encounterd while creating embedded
+software for <a href="#EPROM">EPROM</a>-programming or
+FLASH-storage. As from version <a href="#NEW">2.00</a> on, Binex
+is a console application only suited for running on a
+Win32-platform (Windows 9x or Windows NT). If you are still using
+<a href="#DOS">DOS</a>, you will need an older version of Binex
+(V1.45).</p>
+
+<p>Binex is a Windows console application, so it runs in a
+DOS-box under Windows, but not in a DOS-only environment. Binex
+is controlled via parameters on the command line or from a
+command file. It is normally used embedded in a script file or a
+makefile. </p>
+
+<p>The main functions (actions) of Binex are: </p>
+
+<ul>
+    <li><a href="#hex-bin">conversion of hex-file(s) to binary
+        file(s)</a> (HEX =&gt; BIN)</li>
+    <li><a href="#bin-hex">conversion of binary file(s) to
+        hex-files(s)</a> (BIN =&gt; HEX)</li>
+    <li><a href="#hex-hex">copying and/or merging of hex-file(s)</a>
+        (HEX =&gt; HEX)</li>
+    <li><a href="#adsp-boot">ADSP-2101 hex-bootfile processing</a></li>
+</ul>
+
+<p>During these actions, Binex can perform several operations on
+the data, like:</p>
+
+<ul>
+    <li><a href="#move">move data to a new base address</a></li>
+    <li><a href="#fill">fill a data range with a byte, word, or
+        longword</a></li>
+    <li><a href="#checksum">checksum calculation and insertion</a></li>
+    <li><a href="#swapping">byte order swapping</a></li>
+    <li><a href="#discard">removing (discarding) data</a></li>
+    <li><a href="#split">splitting data files</a></li>
+</ul>
+
+<p>Binex can therefore perform most common actions necessary for
+the production of absolute-addressed embedded software.</p>
+
+<p>This document is the user manual of Binex V2.00. Binex itself
+contains a concise help-screen with all available options, that
+is shown when Binex is called with no parameters.</p>
+
+<p>The next sections describe <a href="#NEW">new</a> features of
+Binex, <a href="#INSTALLATION">installation</a>, and
+de-installation of the program. After that the <a href="#USAGE">usage</a>
+of Binex is explained, with all actions, operations and how to
+control them, illustrated by an <a href="#EXAMPLE">example</a>.</p>
+
+<p>Detailed information is available in the section about the
+used <a href="#FORMATS">file formats</a>, and <a href="#MESSAGES">error
+messages</a>. A <a href="#GLOSSARY">glossary</a> and a <a
+href="#COLOPHON">colophon</a> conclude the document.</p>
+
+<hr noshade>
+
+<h2>WHAT'S <a name="NEW">NEW</a> in Binex V2.00</h2>
+
+<p>If you are upgrading from an older version of Binex, you
+should take note of the following modifications:</p>
+
+<ul>
+    <li>Binex V2.00 is now a <strong>Windows console application</strong>
+        instead of a DOS console application. It will not run if
+        you booted your system to MS-DOS modus. However you can
+        run the program from a DOS-box under Windows.<br>
+        <br>
+        </li>
+    <li>Binex accepts <a href="#Linear hex-format">linear hex
+        input files</a>.<br>
+        <br>
+        </li>
+    <li>Binary output files no longer have their base address as
+        file name if an output file name is specified via the <a
+        href="#Output">/O</a>-switch.<br>
+        <br>
+        </li>
+    <li><a href="#parameter">Parameter</a> syntax and
+        functionality is fully <strong>compatible</strong> with
+        Binex V1.43, V1.44 and V1.45, apart from the subsequent
+        notes.<br>
+        <br>
+        </li>
+    <li><a href="#option">Options</a> may alternatively start
+        with a <strong>minus sign</strong> &quot;-&quot;, if you
+        are used to Unix style typing.<br>
+        <br>
+        </li>
+    <li>The <strong>EMS-option</strong> (/*) available from V1.43
+        on, has become obsolete and has been removed as a valid
+        parameter.<br>
+        <br>
+        </li>
+    <li>The <strong>Output</strong>-suboption (O) is removed as
+        valid suboption with the /F (Fill) and /C (Check)
+        operations. You should use an action specifier like /X or
+        the output switch /O if you want output.<br>
+        <br>
+        </li>
+    <li>The operations /F (<a href="#fill">Fill</a>), and /C (<a
+        href="#checksum">Check</a>) are now processed multiple
+        times in order of presence. Their View switches only act
+        on the operation and are no longer global like the
+        /V-switch.<br>
+        <br>
+        </li>
+    <li>The suboptions Z (<a href="#swapping">Swap</a>) and : (<a
+        href="#discard">Discard</a>) have been promoted to fully
+        functional operations with their own parameters. You can
+        no longer specify them as a suboption of an action, but
+        you must specify them as an operation. They are processed
+        multiple times in order of presence. Note that the
+        Discard-operation now removes data inside the specified
+        range in stead of outside the specified range, as the old
+        suboption did. Use the /:: variant of the Discard
+        operation to replace existing Discard suboptions.<br>
+        <br>
+        </li>
+    <li><a href="#Comment">Comment lines</a> in hex files can now
+        be preserved during processing. Use the /;+ switch.<br>
+        <br>
+        </li>
+    <li>Parameters can now be specified in a <a
+        href="#command file specifier">command file</a>, a simple
+        text file with each line containing one parameter. The
+        command file is specified as parameter itself with the
+        &quot;@&quot;-sign preceding its file name. The command
+        line and the command file may contain any number of
+        command file specifiers, the nesting level is only
+        limited by available memory. This syntax extension
+        implies that you can no longer have input file names that
+        start with a &quot;@&quot; (if you have, just precede the
+        name with the current directory specifier, like:
+        &quot;.\@myfilename&quot;).<br>
+        <br>
+        </li>
+    <li>In the command file you may want to add <a
+        href="#comment parameter">comments</a>. Parameters that
+        start with a semicolon &quot;;&quot; are treated as
+        comment (also on the command line) and are skipped.<br>
+        <br>
+        </li>
+    <li>Parameters with<strong> long filenames</strong> are
+        supported automatically, but may require delimiting on
+        the command line. This is impelled if the file name or
+        path contains any spaces. Simply embed the complete
+        parameter with double quotes, like: &quot;/Oc:\My
+        Documents&quot;. In the command file no delimiting is
+        necessary, since each line contains only one parameter.</li>
+</ul>
+
+<hr noshade>
+
+<h2><a name="INSTALLATION">INSTALLATION</a></h2>
+
+<p>The installation of Binex is easy.</p>
+
+<ol>
+    <li>Copy the file BINEX.EXE to the utility-directory of your
+        personal computer or server, for example C:\UTL.<br>
+        <br>
+        </li>
+    <li>For your convenience this directory should be in the <em>search
+        path</em> of your system. If necessary edit the file
+        AUTOEXEC.BAT in the root of your startup disk with the
+        line: <blockquote>
+            <pre>PATH=%PATH%;C:\UTL</pre>
+        </blockquote>
+        <p>Reboot your system to make the changes effective.</p>
+    </li>
+    <li>Ready.</li>
+</ol>
+
+<p>Binex V2.00 can replace any previous version of Binex, however
+if you still want to use Binex under DOS, you will need this
+older version, e.g. Binex V1.44 or V1.45.</p>
+
+<p>Binex does not use environment variables or registry settings,
+nor makes it any changes to the registry or any other system
+resource. <strong>De-installation</strong> of Binex is therefore
+as easy as the installation: just remove BINEX.EXE from your
+system.</p>
+
+<hr noshade>
+
+<h2><a name="USAGE">USAGE</a></h2>
+
+<p><a href="#parameter"><font size="2">parameter</font></a><font
+size="2"> | </font><a href="#option"><font size="2">option</font></a><font
+size="2"> | </font><a href="#actions"><font size="2">actions</font></a><font
+size="2"> | </font><a href="#operations"><font size="2">operations</font></a><font
+size="2"> | </font><a href="#switches"><font size="2">switches</font></a></p>
+
+<p>Open a console window (e.g. in Windows 95 select <strong>Start</strong>|<strong>Programs</strong>|<strong>MS-DOS-prompt</strong>)
+and type the command:</p>
+
+<pre><tt>&nbsp;&nbsp;&nbsp;&nbsp;BINEX</tt></pre>
+
+<p>Binex shows its <a name="help screen"><strong>help screen</strong></a>:</p>
+<div align="center"><center>
+
+<table border="1" cellpadding="8" cellspacing="1"
+bgcolor="#FFFFFF">
+    <tr>
+        <td><pre>Binex V2.00 1999.05.06 (c) 1990-1999 by E.K.H. van der Pols, Zuidland.
+
+Usage:	BINEX {option} {inputfile[.HEX]} {;&lt;comment&gt;} {@&lt;cmdfile&gt;}
+
+ /A[&lt;page&gt;]	Encheck ADSP-2101 hex-file [or extract Boot Page]
+ /B[V]		Decode hex-file into binary files
+ /H[HVS&lt;n&gt;]	Encode binary file(s) into hex-file[s]
+ /X[XVS&lt;n&gt;]	Copy hex file(s) to hex-file[s]
+
+ /C[WKEIV][@&lt;addr&gt;][&amp;&lt;sumaddr&gt;]		Check data range
+ /F[WLIV]@&lt;addr&gt;[-&lt;addr&gt;][:&lt;data&gt;]	Fill range with data
+ /Z[V][@&lt;addr&gt;][-&lt;addr&gt;]		Swap data bytes
+ /:[:V][@&lt;addr&gt;][-&lt;addr&gt;]		Discard data [out of] range
+
+ /O[&lt;file&gt;]	Output destination file, directory or device
+ /L[ANS:-]	Labels [Alpha,Num,Save,Discard,Disable]
+ /@&lt;base&gt;	base address of data			/V	View
+ /$&lt;newbase&gt;	new data base address			/![+-]	Backup
+ /-&lt;maxaddr&gt;	highest data address			/;[+-]	Comments
+ /%[+-][&lt;data&gt;]	empty data byte value [FF]		/?	Help
+
+   [E-Enable, I-Intel, K-CRC16, W-Word, L-Long, V-View, S&lt;n&gt;-Split output]</pre>
+        </td>
+    </tr>
+</table>
+</center></div>
+
+<p>This help screen gives a concise overview of all available
+parameters and options. These are all explained in the following
+sections.</p>
+
+<p>Although you can use Binex by typing in commands, Binex is
+normally used by calling it from a <strong>script</strong> or <strong>make
+file</strong>. That is why the commands and options are as short
+as possible. Examples of script files or make files are beyond
+the scope of this document, since these are more often as cryptic
+as Binex's commands.</p>
+
+<p>Binex is controlled via <a name="parameters"><strong>parameters</strong></a>
+that are entered after the program name on the <strong>command
+line</strong>:</p>
+
+<pre><tt>&nbsp;&nbsp;&nbsp;&nbsp;BINEX {parameter}</tt></pre>
+
+<p>Parameters are separated on the command line by white space
+characters. If a parameter contains one or more white space
+characters, e.g. in a long file name, the complete parameter
+should be enclosed in double quotes.</p>
+
+<p>A <a name="parameter"><strong>parameter</strong></a> can be
+any of the following:</p>
+
+<ul>
+    <li>a <a href="#command file specifier">command file
+        specifier</a></li>
+    <li>a <a href="#comment parameter">comment parameter</a></li>
+    <li>an <a href="#input file name">input file name</a></li>
+    <li>an <a href="#option">option</a> (action, operation, or
+        switch)</li>
+</ul>
+
+<p>A simple example of a Binex command line is:</p>
+
+<pre><tt>&nbsp;&nbsp;&nbsp;&nbsp;BINEX @cmdfile.txt /xv &quot;My Documents\MyInputfile.hex&quot; /OMyOutputfile.hex &quot;;no backup&quot; /!-</tt></pre>
+
+<p>A <a name="command file specifier"><strong>command file
+specifier</strong></a> consists of an <em>at-sign</em>
+&quot;@&quot; preceding a valid text file name. The text file
+should contain Binex parameters, one parameter per line. The use
+of a command file circumvents the restrictions on the number and
+size of parameters by the total length of the command line. The
+command line and the command file may contain any number of
+command file specifiers, the nesting level is only limited by
+available memory. Delimiting of parameters containing white space
+characters in the command file is not allowed, nor necessary,
+since they are delimited by the line separators of the file.</p>
+
+<p>A <a name="comment parameter"><strong>comment parameter</strong></a><strong>
+</strong>starts with a <em>semi-colon</em> &quot;;&quot; and
+indicates a parameter that is ignored by the program. It is meant
+for usage in a command file, but can also be used on the command
+line, as illustrated in the example above.</p>
+
+<p>An <a name="input file name"><strong>input file name</strong></a>
+may contain a <em>directory path</em>, <em>wildcards</em>, and a <em>file
+name extension</em>. The default input file name extension is
+&quot;.HEX&quot;. Binex will expand all file names, solve
+wildcards, and sort input file names alphabetically. Read the
+section about <a href="#FORMATS">file formats</a> to learn what
+kind of input files can be specified.</p>
+
+<p>An <a name="option"><b>option</b></a> always starts with a <i>forward
+slash</i> &quot;/&quot; or a <em>minus</em>-sign &quot;-&quot;.
+After this specifier a letter or token follows that specifies the
+option. More letters or tokens may follow this first character,
+indicating <strong>suboptions</strong>. Options are divided into:</p>
+
+<ul>
+    <li><a name="actions"><strong>actions</strong></a>:<br>
+        these options select the main function of Binex:<br>
+        <ul type="square">
+            <li><a href="#adsp-boot">/A - Analog Devices
+                ADSP-2101 hex-bootfile processing</a></li>
+            <li><a href="#hex-bin">/B - Conversion of hex-file(s)
+                to binary file(s)</a></li>
+            <li><a href="#bin-hex">/H - Conversion of binary
+                file(s) to hex-file(s)</a></li>
+            <li><a href="#hex-hex">/X - Copying and/or merging of
+                hex-file(s)</a></li>
+            <li><a href="#help">/? - Help</a></li>
+        </ul>
+    </li>
+</ul>
+
+<ul>
+    <li><a name="operations"><strong>operations</strong></a>:<br>
+        these options select additional operations:<ul>
+            <li><a href="#move">/$ - Move data to a new base
+                address</a></li>
+            <li><a href="#fill">/F - Fill a data range with a
+                byte, a word, or a longword</a></li>
+            <li><a href="#checksum">/C - Checksum calculation and
+                insertion</a></li>
+            <li><a href="#swapping">/Z - Byte order swapping</a></li>
+            <li><a href="#discard">/: - Discard data</a></li>
+        </ul>
+    </li>
+</ul>
+
+<ul>
+    <li><a name="switches"><strong>switches</strong></a>:<br>
+        these options select additional settings:<ul>
+            <li><a href="#view">[/]V - View</a></li>
+            <li><a href="#split">S&lt;n&gt; - Split data</a></li>
+            <li><a href="#intel-order">I - Intel order</a></li>
+            <li><a href="#label">/L - Symbolic label processing</a></li>
+            <li><a href="#output">/O[&lt;file&gt;] - Output</a></li>
+            <li><a href="#backup">/![+-] - Back Up</a></li>
+            <li><a href="#EmptyByte">/%[+-][&lt;empty&gt;] -
+                EmptyByte-value</a></li>
+            <li><a href="#comments">/;[+-] - Comments</a></li>
+            <li><a href="#BaseAddress">/@&lt;base&gt; -
+                BaseAddress-value</a></li>
+            <li><a href="#MaxAddress">/-&lt;maxaddr&gt; -
+                MaxAddress-value</a></li>
+        </ul>
+    </li>
+</ul>
+
+<p>If <strong>no action</strong> is specified but an input file
+name is present, the file is processed as hex input file and all
+specified operations are performed, but no output file is
+generated, unless the /O-switch is specified. This way you can
+e.g. test the syntax of a hex file, or calculate a checksum
+without producing an output file.</p>
+
+<p>All operations except the Move-operation can be specified more
+than once. They are executed in order of presence. The
+Move-operation is executed before all other operations.</p>
+
+<p>Information about processed files, as well as error messages,
+is output via the <strong>standard output</strong> channel of the
+operating system. This means that you can redirect this output to
+a (disk) file, using the redirection specifier on the command
+line &quot;&gt;filename&quot;. Progress indication output (record
+number in progress) is output via the <strong>standard error</strong>
+channel of the operating system, so this always ends up on the
+console screen, since you can not redirect this channel under
+Windows.</p>
+
+<hr noshade>
+
+<h3>Action /<a name="adsp-boot">A</a> - Analog Devices ADSP-2101
+hex-bootfile processing</h3>
+
+<dl>
+    <dt><b><tt>/A[&lt;page&gt;]</tt></b></dt>
+    <dd>Encheck ADSP-2101 hex-file [or extract Boot Page].</dd>
+</dl>
+
+<p>Action <tt>/A</tt> lets Binex process the specified input
+file(s) as a hex-file with bootcode for the ADSP-2101 Digital
+Signal Processor of Analog Devices. Such a file can contain one
+or more pages of bootcode of 8 kbyte each. Binex can perform two
+operations on these files:</p>
+
+<dl>
+    <dt><tt>/A</tt></dt>
+    <dd>checksum calculation and insertion for each of the
+        bootpages;</dd>
+    <dt><tt>/A&lt;page&gt;</tt></dt>
+    <dd>convert bootpage &lt;page&gt; to a binary file;
+        page=0..7.</dd>
+</dl>
+
+<p>These operations can not be combined in one action. </p>
+
+<p>Since the ADSP-2101 normally has no access to its boot memory
+space during normal operation, normal checksum operations of
+Binex can not be used for this kind of datafiles. A special kind
+of checksum is calculated, that is inserted into an empty space
+in the exception vector table of the bootcode. More information
+about this checksum can be found in the documentation of the
+software of the XE-SSF2. </p>
+
+<p>This action always produces an output file. The <tt>/A</tt>-operation
+produces a hex-file with the default extension 'CHK'. The <tt>/A&lt;page&gt;</tt>-operation
+produces a binary file with the extenson 'BP&lt;page&gt;'. </p>
+
+<hr noshade>
+
+<h3>Action /<a name="hex-bin">B</a> - Conversion of hex-file(s)
+to binary file(s)</h3>
+
+<dl>
+    <dt><b><tt>/B[V]</tt></b></dt>
+    <dd>Decode hex-file(s) into binary files.</dd>
+</dl>
+
+<p>The action <tt>/B</tt> converts one or more hex-input files
+into binary output files. Each input file is processed
+individually. Each consecutive memory area from an input file is
+output in a separate binary file with a name representing the
+hexadecimal value of the starting address of the memory area
+(e.g. &quot;00002000.BIN&quot;). </p>
+
+<p>If a single binary image of a hex file with multiple memory
+areas is desired, then you should first transform the hex-file to
+a temporary single memory area hex-file, by copying it with the
+switch /%+ <a href="#EmptyByte">EmptyByte</a> expanding on. </p>
+
+<p>After reading an input file the following <a
+href="#operations">operations</a> can be performed:</p>
+
+<ul>
+    <li><a href="#move">move data to a new base address</a>
+        (option /$)</li>
+    <li><a href="#fill">fill a data range</a> (option /F)</li>
+    <li><a href="#checksum">checksum calculation and insertion</a>
+        (option /C)</li>
+    <li><a href="#swapping">byte order swapping</a> (option /Z)</li>
+    <li><a href="#discard">discarding of data</a> (option /:)</li>
+</ul>
+
+<p>Switch <a href="#view"><tt>V</tt></a> (View) makes Binex show
+internal data on the processed data collection.</p>
+
+<hr noshade>
+
+<h3>Action /<a name="bin-hex">H</a> - Conversion of binary
+file(s) to hex-file(s)</h3>
+
+<dl>
+    <dt><b><tt>/H[HVS&lt;n&gt;]</tt></b></dt>
+    <dd>Encode binary file(s) into hex-file[s].</dd>
+</dl>
+
+<p>The action <tt>/H</tt> converts one or more binary input files
+into a hex-output file.</p>
+
+<p>Switch <tt>H</tt> makes Binex process each input file
+individually. It should be the first switch to follow the action
+specifier (&quot;/HH&quot;).</p>
+
+<p>If the name of an input file represents a hexadecimal value
+(e.g. &quot;00002000.BIN&quot;), then this value is taken to be
+the base address of the corresponding data area in the hex output
+file. When such address indication is absent, <a
+href="#BaseAddress"><i>BaseAddress</i></a> is taken as base
+address of the data.</p>
+
+<p>Data overlap when merging multiple input files into one
+hex-file is not allowed and results in an exception.</p>
+
+<p>After reading of the input data the following <a
+href="#operations">operations</a> can be performed:</p>
+
+<ul>
+    <li><a href="#move">move data to a new base address</a>
+        (option /$)</li>
+    <li><a href="#fill">fill a data range</a> (option /F)</li>
+    <li><a href="#checksum">checksum calculation and insertion</a>
+        (option /C)</li>
+    <li><a href="#swapping">byte order swapping</a> (option /Z)</li>
+    <li><a href="#discard">discarding of data</a> (option /:)</li>
+</ul>
+
+<p>Switch <tt>S&lt;n&gt;</tt> (<a href="#split">Split data</a>)
+makes that the hex output file is split into <tt>&lt;n&gt;</tt>
+(decimal number, 2 .. 4096) hex output files, each containing the
+n-th byte of the original output file. Only the splitted files
+are output.</p>
+
+<p>Switch <a href="#view"><tt>V</tt></a> (View) makes Binex show
+internal data on the processed data collection.</p>
+
+<hr noshade>
+
+<h3>Action /<a name="hex-hex">X</a> - Copying and/or merging of
+hex-files</h3>
+
+<dl>
+    <dt><b><tt>/X[XVS&lt;n&gt;]</tt></b></dt>
+    <dd>Copy hex-file(s) to hex-file[s].</dd>
+</dl>
+
+<p>The action <tt>/X</tt> copies/merges one or more hex input
+files to one hex output file.</p>
+
+<p>Switch <tt>X</tt> makes Binex process each input file
+individually, so no merging takes place then. It should be the
+first switch to follow the action specifier (&quot;/XX&quot;).</p>
+
+<p>Data overlap when merging multiple input files into one
+hex-file is not allowed and results in an exception.</p>
+
+<p>After reading of the input data the following <a
+href="#operations">operations</a> can be performed:</p>
+
+<ul>
+    <li><a href="#move">move data to a new base address</a>
+        (option /$)</li>
+    <li><a href="#fill">fill a data range</a> (option /F)</li>
+    <li><a href="#checksum">checksum calculation and insertion</a>
+        (option /C)</li>
+    <li><a href="#swapping">byte order swapping</a> (option /Z)</li>
+    <li><a href="#discard">discarding of data</a> (option /:)</li>
+</ul>
+
+<p>Switch <tt>S&lt;n&gt;</tt> (<a href="#split">Split data</a>)
+makes that the hex output file is split into <tt>&lt;n&gt;</tt>
+(decimal number, 2 .. 4096) hex output files, each containing the
+n-th byte of the original output file. Only the splitted files
+are output.</p>
+
+<p>Switch <a href="#view"><tt>V</tt></a> (View) makes Binex show
+internal data on the processed data collection.</p>
+
+<hr noshade>
+
+<h3>Action /? - <a name="help">Help</a></h3>
+
+<dl>
+    <dt><tt>/?</tt></dt>
+    <dd>Help.</dd>
+</dl>
+
+<p>Action <tt>/?</tt> shows the <a href="#help screen">help
+screen</a> of Binex; after that Binex terminates, all other
+parameters are ignored. The help screen is also shown if Binex is
+called without any parameters.</p>
+
+<hr noshade>
+
+<h3>Operation /$ - <a name="move">Move</a> data to a new base
+address</h3>
+
+<dl>
+    <dt><tt>/$&lt;newbase&gt;</tt></dt>
+    <dd><i>NewBaseAddress</i>-value; hex-number
+        00000000..7FFFFFFF.</dd>
+</dl>
+
+<p>The operation <tt>/$&lt;newbase&gt;</tt> moves all data from
+the input files to a new base address. The original base address
+is <a href="#BaseAddress"><em>BaseAddress</em></a>, the value of
+the /@-switch. All addresses of the data are recalculated with
+the following formula:</p>
+
+<blockquote>
+    <p><i>Address</i> := <i>Address</i>+(<i>NewBaseAddress</i>-<i>BaseAddress</i>)</p>
+</blockquote>
+
+<p>After the operation <i>BaseAddress</i> gets the value of <i>NewBaseAddress</i>.
+Parameter values of other options with address-values, like the <tt>/-&lt;maxaddr&gt;</tt>
+switch are not recalculated. You must specify these values with
+their new (moved) values. Symbols however are recalculated, so
+symbolic parameter values are automatically adjusted.</p>
+
+<p>The recalculation of adresses always takes place on all input
+data, right after reading the data and before any other operation
+is performed. There is no check on overflow of the recalculated
+addresses.</p>
+
+<hr noshade>
+
+<h3>Operation /F - <a name="fill">Fill</a> a data range</h3>
+
+<dl>
+    <dt><tt>/F[WLIV]@&lt;addr&gt;[-&lt;maxaddr&gt;][:&lt;data&gt;]</tt></dt>
+    <dd>Fill data range.</dd>
+</dl>
+
+<p>The operation <tt>/F</tt> fills a data range starting at
+address <tt>&lt;addr&gt;</tt> and ending with address <tt>&lt;maxaddr&gt;</tt>
+with a value <tt>&lt;data&gt;</tt>. The value <tt>&lt;data&gt;</tt>
+can be a 8-bit byte (<tt>/F</tt>), a 16-bit word (<tt>/FW</tt>),
+or a 32-bit longword (<tt>/FL</tt>).</p>
+
+<p>In case of word or longword filling the byte ordering is
+important. Normally this is <em>most significant byte first</em>
+(Big Endian, or Motorola-order), but with the switch <a
+href="#intel-order"><tt>I</tt></a> <b>Intel order</b> specified,
+the byte order is <em>least significant byte first</em> (Little
+Endian, or Intel-order).</p>
+
+<p>The parameter values <tt>&lt;addr&gt;</tt>, <tt>&lt;maxaddr&gt;</tt>,
+and <tt>&lt;data&gt;</tt> are all hexadecimal values. The
+presence of <tt>&lt;addr&gt;</tt> is compulsory; the default
+value of <tt>&lt;maxaddr&gt;</tt> is calculated to insert just
+one byte, word, or longword, and the default value of <tt>&lt;data&gt;</tt>
+is <a href="#EmptyByte"><i>EmpyByte</i></a>. In case of word or
+longword filling, the <tt>&lt;maxaddr&gt;</tt> is silently
+increased if necessary to include a complete word or longword at
+the end of the specified range. There is no alignment of words of
+longwords to specific addresses forced by Binex.</p>
+
+<p>Switch <a href="#view"><tt>V</tt></a> (View) selects viewing
+of the filling results.</p>
+
+<hr noshade>
+
+<h3>Operation /C - <a name="checksum">Checksum</a> calculation
+and insertion</h3>
+
+<dl>
+    <dt><tt>/C[WKEIV][@&lt;addr&gt;][&amp;&lt;sumaddr&gt;]</tt></dt>
+    <dd>Check data range.</dd>
+</dl>
+
+<p>The operation <tt>/C</tt> calculates a checksum over a data
+range starting at address <tt>&lt;addr&gt;</tt> and ending just
+before <tt>&lt;sumaddr&gt;</tt>. The calculated checksum is
+inserted at address &lt;sumaddr&gt;. </p>
+
+<p>The default value of <tt>&lt;addr&gt;</tt> is <a
+href="#BaseAddress"><i>BaseAddress</i></a> and the default value
+of <tt>&lt;sumaddr&gt;</tt> is calculated in a way that the last
+byte of the checksum is at <a href="#MaxAddress"><i>MaxAddress</i></a>.</p>
+
+<p>By calculating a checksum over a data range the integrity of
+the data can be checked later on by recalculating this checksum
+and comparing it with the stored checksum. There are many
+algorithms for checksum calculation and Binex only supports some
+of them. The checksum is always at the end of the memory area.
+The suboptions <tt>W</tt>, <tt>K</tt>, and <tt>E</tt> select the
+specific checksum-method:</p>
+
+<dl>
+    <dt><tt>/C</tt></dt>
+    <dd>the sum of the 8-bit bytes; the checksum itself is a
+        16-bit word;</dd>
+    <dt><tt>/CW</tt></dt>
+    <dd>the sum of the 16-bit words; the checksum itself is a
+        32-bit longword;</dd>
+    <dt><tt>/CK</tt></dt>
+    <dd>the <i>Cyclic Redundancy Check</i> (CRC-16) of the 8-bit
+        bytes; the checksum itself is a 16-bit word;</dd>
+    <dt><tt>/CKW</tt></dt>
+    <dd>the <i>Cyclic Redundancy Check</i> (CRC-16) of the 8-bit
+        bytes; the checksum itself is a 16-bit word, but is
+        written as a 32-bit longword with the most significant
+        word zero.</dd>
+</dl>
+
+<p>Sometimes it is necessary to be able to recognize the presence
+of a valid checksum, e.g. when you are debugging code that
+expects a valid checksum but it has not been inserted yet. The
+presence of the checksum could be signalled by filling a specific
+memory location with a specific value. This could be done with
+the <a href="#Fill">Fill</a>-operation. The checksum operation
+however has a special switch <tt>E</tt> (<strong>Enable checksum</strong>)
+that makes that the inserted checksum is preceded by a 16-bit
+Enable word (or 32-bit longword in the presence of suboption <tt>W</tt>).
+Binex fills the Enable-word or -longword with Empty Bytes, before
+calculating the checksum. By specifying in the source code a
+different value, the presence of the checksum can be recognized.
+Note: the Enable-(long)word starts at <tt>&lt;sumaddr&gt;</tt>
+and the checksum follows right behind it. The default value of <tt>&lt;sumaddr&gt;</tt>
+is calculated taking the Enable word into account.</p>
+
+<p>Switch <a href="#intel-order"><tt>I</tt></a> (Intel order)
+sets the byte ordering of read and written word- and
+longword-data to least significant byte first.</p>
+
+<p>Switch <a href="#view"><tt>V</tt></a> (View) selects viewing
+of the checksum calculation results. You can compare the original
+value (<kbd>Old data</kbd>) with the calculated value (<kbd>New
+data</kbd>).</p>
+
+<hr noshade>
+
+<h3>Operation /Z - Byte order <a name="swapping">swapping</a></h3>
+
+<dl>
+    <dt><tt>/Z[V][@&lt;addr&gt;][-&lt;maxaddr&gt;]</tt></dt>
+    <dd>Swap bytes in range.</dd>
+</dl>
+
+<p>The operation /<tt>Z</tt> swaps the data bytes of the 16-bit
+words in the range <tt>&lt;addr&gt;</tt> - <tt>&lt;maxaddr&gt;</tt>.</p>
+
+<p>The parameter values <tt>&lt;addr&gt;</tt>, <tt>and
+&lt;maxaddr&gt;</tt> are hexadecimal values. The default value of
+<tt>&lt;addr&gt;</tt> is <a href="#BaseAddress"><i>BaseAddress</i></a>;
+and the default value of <tt>&lt;maxaddr&gt;</tt> is <a
+href="#MaxAddress"><i>MaxAddress</i></a>. Switch <a href="#view"><tt>V</tt></a>
+(View) selects viewing of the swapping operation.</p>
+
+<p>If the range does not start or end on a word-boundary (a even
+address), then the range is expanded with one or two bytes to
+make the boundaries of the range even. If one of the bytes of a
+word is missing in the input data, the <a href="#EmptyByte"><em>EmptyByte</em></a>
+value is inserted instead. Note that no word swapping takes place
+of 32-bit longwords.</p>
+
+<hr noshade>
+
+<h3>Operation /: - <a name="discard">Discard</a> data</h3>
+
+<dl>
+    <dt><tt>/:[:V][@&lt;addr&gt;][-&lt;maxaddr&gt;]</tt></dt>
+    <dd>Discard data inside or outside the specified range.</dd>
+</dl>
+
+<p>The operation /<tt>Z</tt> swaps the data bytes of the 16-bit
+words in the range <tt>&lt;addr&gt;</tt> - <tt>&lt;maxaddr&gt;</tt>.</p>
+
+<p>The operation /<tt>:</tt> removes all data inside the data
+range <tt>&lt;addr&gt;</tt> - <tt>&lt;maxaddr&gt;</tt>. The
+operation /:: removes alls data outside the data range <tt>&lt;addr&gt;</tt>
+- <tt>&lt;maxaddr&gt;</tt><i>.</i></p>
+
+<p>The parameter values <tt>&lt;addr&gt;</tt>, <tt>and
+&lt;maxaddr&gt;</tt> are hexadecimal values. The default value of
+<tt>&lt;addr&gt;</tt> is <a href="#BaseAddress"><i>BaseAddress</i></a>;
+and the default value of <tt>&lt;maxaddr&gt;</tt> is <a
+href="#MaxAddress"><i>MaxAddress</i></a>. Switch <a href="#view"><tt>V</tt></a>
+(View) selects viewing of the discarding operation.</p>
+
+<hr noshade>
+
+<h3>Switch [/]V - <a name="view">View</a></h3>
+
+<dl>
+    <dt><tt>/V</tt></dt>
+    <dd>View.</dd>
+    <dt><tt>V</tt></dt>
+    <dd>View.</dd>
+</dl>
+
+<p>The <tt>/V</tt> View switch makes Binex show an overview of
+the internal data record collection after processing the
+operations. The overview includes start address, end address, the
+number of data bytes, the number of empty bytes, totals of those
+values and the entry point value.</p>
+
+<p>The <tt>V </tt>View switch added to some operations specifier
+makes Binex to output some data about these operations. When
+added to the action specifier, both the record collection
+overview and operation data view are enabled.</p>
+
+<hr noshade>
+
+<h3>Switch S&lt;n&gt; - <a name="split">Split</a> data</h3>
+
+<dl>
+    <dt><tt>S&lt;n&gt;</tt></dt>
+    <dd>Split data; default value: no splitting.</dd>
+</dl>
+
+<p>The switch <tt>S&lt;n&gt;</tt> makes that the hex output file
+is split into <tt>&lt;n&gt;</tt> (decimal number, 2 .. 4096)
+splitted hex output files, each containing the n-th byte of the
+original output file. Only the splitted files are output.</p>
+
+<p>With switch <tt>S2</tt> e.g. two files are created with the
+file extensions &quot;.000&quot; en &quot;.001&quot;, that
+contain the even addressed and odd addressed bytes respectively.</p>
+
+<p>The Split switch can e.g. be used to create image files for
+8-bit EPROM devices. Note: Binex has no way to merge splitted
+files into one image again.</p>
+
+<hr noshade>
+
+<h3>Switch I - <a name="intel-order">Intel</a> order</h3>
+
+<dl>
+    <dt><tt>I</tt></dt>
+    <dd>Intel order; default value: Motorola order.</dd>
+</dl>
+
+<p>In case of reading or writing 16-bit words or 32-bit longwords
+the byte and word ordering is important. Normally Binex works
+with <em>most significant byte/word first</em> (Big Endian, or
+Motorola-order). With global switch <tt>I</tt> <b>Intel order</b>
+specified, Binex works with <em>least significant byte/word first</em>
+(Little Endian, or Intel-order).</p>
+
+<hr noshade>
+
+<h3>Switch /L - Symbolic <a name="label">label</a> processing</h3>
+
+<dl>
+    <dt><tt>/L[ANS:-]</tt></dt>
+    <dd>Label processing; default value: /L- (disabled).</dd>
+</dl>
+
+<p>A hex data file might contain a <a href="#symbol table">symbol
+table</a> that Binex processes and uses for solving symbolic
+parameter values.</p>
+
+<p>Switch <tt>/LA</tt> (Alpha) prints the symbol table
+alphabetically sorted on <em>module.label</em>-name in a file
+&quot;&lt;filename&gt;.LBA&quot;.</p>
+
+<p>Switch <tt>/LN</tt> (Numerical) prints the symbol table
+numerically sorted in a file &quot;&lt;filename&gt;.LBN&quot;.</p>
+
+<p>Switch <tt>/LS</tt> (Save) prints the symbol table in the
+original format in a file &quot;&lt;filename&gt;.LBX&quot;.</p>
+
+<p>Switch <tt>/L:</tt> (Discard) prevents output of the symbol
+table in the hex output file(s).</p>
+
+<p>Switch <tt>/L-</tt> (Disable) disables reading and processing
+of a symbol table; symbolic parameter values cannot be solved.</p>
+
+<p>Both <tt>/LA</tt> and <tt>/LN</tt> produce files with the
+label-name preceded with its module-name and with a preceding
+underscore (&quot;_&quot;) removed.</p>
+
+<p>If a symbol table is present and processing is enabled, you
+can make use of it when specifying parameter values. Every
+hexadecimal parameter value (address, data, empty byte value,
+etc.) can be replaced with a valid symbolic label name, preceded
+with a &quot;$&quot;-sign. The label name may be preceded with a
+module name, separated with a period (&quot;.&quot;). An
+underscore (&quot;_&quot;) at the beginning of the label name can
+be omitted. A label name may optionally be followed by a plus
+sign &quot;+&quot;, followed by a hexadecimal offset value. The
+resulting value is calculated as the sum of the label value and
+the offset:</p>
+
+<pre><tt>&nbsp;&nbsp;&nbsp;&nbsp;$LabelName+3ac4</tt></pre>
+
+<p>Binex will solve each symbolic parameter value at the moment
+it is needed for processing. If a symbolic value can not be
+solved, an exception takes place. Module and label names are
+processed <i>case sensitive</i>.</p>
+
+<hr noshade>
+
+<h3>Switch /;[+-] - <a name="comments">Comments</a></h3>
+
+<dl>
+    <dt><tt>/;[+-]</tt></dt>
+    <dd>Preserve comment lines in hex files ; default value:
+        disabled.</dd>
+</dl>
+
+<p>Hex files may contain lines that are treated as <a
+href="#Comment">comment</a> by Binex that could be preserved
+during processing. These lines start with a semicolon. Use the
+/;+ switch to enable comment preservation, and use the /;- switch
+to disable comment preservation.</p>
+
+<hr noshade>
+
+<h3>Switch /O[&lt;file&gt;] - <a name="Output">Output</a></h3>
+
+<dl>
+    <dt><tt>/O[&lt;file&gt;]</tt></dt>
+    <dd>Output destination file, directory or device.</dd>
+</dl>
+
+<p>The switch <tt>/O</tt> makes Binex to write the output file(s)
+to the specified file name, directory path or device name.</p>
+
+<p>If no file name is specified, it is taken from the input file,
+except for binary output files that have their base address as
+file name. If no file name extension is specified, it is
+determined by the action performed (e.g. &quot;.HEX&quot; of
+&quot;.BIN&quot;). Device names (like LPT1, NUL) are obviously
+not changed.</p>
+
+<p>Existing files will be <a href="#BackUp">backed up</a>, if
+this is enabled.</p>
+
+<hr noshade>
+
+<h3>Switch /![+-] - <a name="BackUp">Back Up</a></h3>
+
+<dl>
+    <dt><tt>/![+-]</tt></dt>
+    <dd>Back-up output files; enable/disable generation of back
+        up output files; default value: enabled.</dd>
+</dl>
+
+<p>If the output file generated by Binex has a name of a file
+that already exists, that file will be overwritten, unless it is
+backed up. With backup enabled the existing file is renamed with
+extension &quot;.!xx&quot;, with xx being a hexadecimal number
+ranging 00 .. FF. Therefore Binex creates 256 back-ups before a
+file is discarded (switch <tt>/!+</tt>). The creation of back up
+files is disabled using the <tt>/!-</tt> switch.</p>
+
+<hr noshade>
+
+<h3>Switch /%[+-][&lt;empty&gt;] - <a name="EmptyByte">EmptyByte</a>-value</h3>
+
+<dl>
+    <dt><tt>/%[+-][&lt;empty&gt;]</tt></dt>
+    <dd><i>EmtpyByte</i>-value/compression/expansion; hexadecimal
+        number 00..FF, default value FF.</dd>
+</dl>
+
+<p>All bytes in the data range that has not been read from the
+input files are (virtually) filled in some operations with the <i>EmptyByte</i>-value,
+e.g. when calculating checksums. An empty, erased <a
+href="#EPROM">EPROM</a> normally contains FF-values, so this is
+the default value of EmptyByte.</p>
+
+<p>The switch <tt>/%+</tt> (empty byte expansion) makes that all
+virtual Empty Bytes in the data range are actually written when
+writing a hex output file; it is said that expansion of the data
+takes place, since these EmptyBytes are no longer virtual.</p>
+
+<p>The switch <tt>/%-</tt> (empty byte compression) makes that
+Empty Bytes (bytes with the EmptyByte-value) at the end of
+S-records are not written to the hex output file; now it is said
+that compression takes place, since Empty Bytes are virtualized.</p>
+
+<hr noshade>
+
+<h3>Switch /@&lt;base&gt; - <a name="BaseAddress">BaseAddress</a>-value</h3>
+
+<dl>
+    <dt><tt>/@&lt;base&gt;</tt></dt>
+    <dd><i>BaseAddress</i>-value; 32-bit hexadecimal number
+        00000000..7FFFFFFF, default value is lowest address in
+        databuffer (auto ranging).</dd>
+</dl>
+
+<p>The switch <tt>/@&lt;base&gt;</tt> specifies for certain
+operations the lower boundary of the memory range to be
+processed.</p>
+
+<hr noshade>
+
+<h3>Switch /-&lt;maxaddr&gt; - <a name="MaxAddress">MaxAddress</a>-value</h3>
+
+<dl>
+    <dt><tt>/-&lt;maxaddr&gt;</tt></dt>
+    <dd><i>MaxAddress</i>-value; 32-bit hexadecimal number
+        00000000..7FFFFFFF, default value highest address in
+        databuffer (auto ranging).</dd>
+</dl>
+
+<p>The switch <tt>/-&lt;maxaddr&gt;</tt> specifies for certain
+operations the higher boundary of the memory range to be
+processed.</p>
+
+<hr noshade>
+
+<h2><a name="EXAMPLE">EXAMPLE</a></h2>
+
+<p>Modern embedded controller boards often contain multiple
+processors of various kind, booted from a single EPROM or FLASH
+memory source by a central microcontroller. Apart from the
+software for de microcontroller, the hex image file of the EPROM
+should also contain the software for the other processors, all
+properly guarded with checksums to make sure that all components
+receive valid software at initialization. Each processor might
+have its own development environment producing the output
+software in some hex or binary format. Binex takes care of
+putting the pieces together.</p>
+
+<p>In this example we look at a controller board with a Motorola
+MC68332 microcontroller, containing two processors itself (CPU
+and TPU), accompanied by a digital signal processor (DSP), and an
+Altera FLEX-EPLD, a programmable logic device that needs
+configuration at power-up. The CPU is in charge of configuring
+the TPU, DSP, and the EPLD at power-up with data from its own
+FLASH-memory. We will demonstrate in this example the combination
+and processing of the CPU and EPLD software.</p>
+
+<p>The CPU software development system produces an output file
+MICRO1.HEX with the CPU code in Motorola S-format. We like to add
+a 32-bit word-wise checksum over this code from address 0 (start
+of CPU code) to a label called EPROMSum, defined in the source
+code of the CPU. It should also contain an Enable longword, to
+indicate the insertion of the checksum. Byte-ordering is
+big-endian.</p>
+
+<p>The FLEX-EPLD-development system produces a file FLEX.HEX
+containing the configuration data in Intel-hex format, starting
+at address 0. These data should reside at address 00010000 (hex)
+of the CPU address space.</p>
+
+<p>The data should be programmed into two 8-bit wide FLASH-memory
+components of 512 kbyte each, using a programmer with a one byte
+socket. One device should contain the even bytes and the other
+the odd bytes. The sector protection bits of both memory devices
+should be disabled (set to 0). This can be done via the
+programmer, by adding a 0-byte to the data of each component at
+the first address after the address space of the component (80000
+hex). </p>
+
+<p>All operations can be done in two Binex actions. First the
+data in file FLEX.HEX is moved to the correct address:</p>
+
+<pre><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BINEX /X /@0 /$10000 FLEX</tt></pre>
+
+<p>Binex will move all data from base address 0 to the new base
+address 10000 hex. Output is written to the file FLEX.HEX, whilst
+the input file is backed up under the name FLEX.!00. </p>
+
+<p>Next a second Binex action combines the MICRO1.HEX data and
+the FLEX.HEX data in one data set, calculates and inserts the
+checksum over the CPU data, fills the data for the sector
+protection bits with 0, and finally writes the output data to two
+splitted hex files: </p>
+
+<pre><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BINEX /XS2 /CWE&amp;$EPROMSum /FW@100000:0 FLEX MICRO1 /OMICRO</tt></pre>
+
+<p>The last action is processed by Binex as follows: first the
+two files FLEX.HEX and MICRO1.HEX are read in alphabetical order.
+Then on address 00100000 hex a word with value 0 is added to the
+data (option /F). Next, after filling of the Enable-longword on
+address $EPROMSum (symbolic label value is solved with the symbol
+table data in MICRO1.HEX) with FFFFFFFF hex (default value of
+Empty Byte), the sum of the words from address 0 up and including
+$EPROMSum+3 is calculated and written as longword at address
+$EPROMSum+4 (option /C). Finally two files are produced (switches
+S2 en /O): MICRO.000 with all even bytes and MICRO.001 with all
+odd bytes. With these files the FLASH memories can be programmed.
+Note that, due to the splitting, the sector protection bit-bytes
+are now on the correct address (100000 / 2).</p>
+
+<hr>
+
+<h2>FILE <a name="FORMATS">FORMATS</a></h2>
+
+<p>Binex processes files in several data formats. Output files
+are either in <a href="#binary format">simple binary format</a>,
+or in <a href="#Motorola S-format">Motorola S-format</a>. Input
+files can be in simple binary format, Motorola S-format, <a
+href="#Intel hex-format">Intel hex-format</a>, or <a
+href="#Linear hex-format">Linear hex-format</a>.</p>
+
+<p>Binex autodetects hex input files as being in Linear
+hex-format, Motorola S-format, or Intel-hex format. Hex files may
+contain a <a href="#Symbol table">symbol table</a> and <a
+href="#Comment">comment</a>. All these formats are recognized on
+a per line basis, which means that you can have all formats
+intermixed in one file.</p>
+
+<p>Binary files are not autodetected; processing of binary or hex
+files depends on the specified action.</p>
+
+<h3>Simple <a name="binary format">binary format</a></h3>
+
+<p>A file in the simple binary format contains just binary data.
+There are no delimiters, addresses, or checksums in the file.
+Binex normally assumes the filename to contain the hexadecimal
+starting address of the data, but this need not be the case.</p>
+
+<h3><a name="Linear hex-format">Linear hex-format</a></h3>
+
+<p>A hex file in the linear hex-format is a text file containing
+hexadecimal encoded data whithout any address specification,
+checksum, or record organisation. Data bytes can be grouped in
+any number of bytes, separated with any number of non-hex
+character(s). Each line however should start with the
+hex-character of the first data byte, and should contain no more
+than 256 data bytes. A file could look like this:</p>
+
+<pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <tt>01 23 45 67 89 AB CD EF 01 23 45 67 89 AB CD EF 01 23 45 67 89 AB CD EF
+</tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <tt>01,23,45,67,89,AB,CD;EF;01;23;45,67,89,AB,CD,EF,01,23,45,67,89,AB,CD,EF</tt></pre>
+
+<p>or like this:</p>
+
+<pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <tt>012345
+	6789AB
+	CDEF01</tt></pre>
+
+<p>Data of linear hex files are appended to the data collection
+of Binex. This means that you normally will have to <a
+href="#move">move</a> the data to a new base address before
+further processing is possible.</p>
+
+<h3><a name="Motorola S-format">Motorola S-format</a></h3>
+
+<p>A file in the Motorola S-format is a text file containing
+hexadecimal encoded data, organised in so-called records: a text
+line in the following format:</p>
+
+<pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <tt>S&lt;recordtype&gt;&lt;recordlength&gt;&lt;address&gt;&lt;data&gt;&lt;checksum&gt;</tt></pre>
+
+<p>In which is:</p>
+
+<blockquote>
+    <dl>
+        <dt>'S'</dt>
+        <dd>identifying character of the record (therefore called
+            S-record);</dd>
+        <dt>&lt;recordtype&gt;</dt>
+        <dd>a character specifying the type of the record:</dd>
+        <dd><dl>
+                <dt>'0':</dt>
+                <dd><em>header record</em> with 2 bytes address
+                    (value 0); contains usually not much
+                    interesting data, e.g. with the hex encoded
+                    text &quot;HEADER&quot;. Binex starts its
+                    output files with an S0 record containing the
+                    hex encoded text &quot;Binex V2.00&quot;.</dd>
+                <dt>'1', '2', '3':</dt>
+                <dd><em>data record</em> with 2, 3, respectively
+                    4-byte address that represents the absolute
+                    starting address of the first data byte of
+                    the record.</dd>
+                <dt>'5':</dt>
+                <dd><em>data record count record</em> with a
+                    2-byte address that represents the preceding
+                    number of data records; this record contains
+                    no data bytes; Binex checks the S5-records in
+                    input files and produces an exception if the
+                    number of data records is not ok, but Binex
+                    itself produces no S5-records in its output
+                    files.</dd>
+                <dt>'7', '8', '9':</dt>
+                <dd><em>termination record</em> with a 4, 3,
+                    respectively 2-byte address that represents
+                    the Entry Point in the terminated data block,
+                    so e.g. the initial value of the program
+                    counter of a processor. Binex retains per
+                    action the last read entry point from its
+                    input files and writes it to its output file.</dd>
+            </dl>
+        </dd>
+        <dt>&lt;recordlength&gt;</dt>
+        <dd>&nbsp;hex-encoded byte representing the number of
+            address, data, and checksum bytes.</dd>
+        <dt>&lt;address&gt;</dt>
+        <dd>&nbsp;hex-encoded 2, 3, or 4-byte address, depending
+            on the record type;</dd>
+        <dt>&lt;data&gt;</dt>
+        <dd>&nbsp;hex-encoded data bytes (usually not more than
+            64 per record, maximum 255);</dd>
+        <dt>&lt;checksum&gt;</dt>
+        <dd>&nbsp;one's complement of the sum of all bytes in the
+            record after the recordtype. Apart from the correct
+            hex-encoding Binex checks this checksum in input
+            files.</dd>
+    </dl>
+</blockquote>
+
+<p>Files with only S0, S1 and S9 records are also called to be in
+<strong>Motorola Exorcisor</strong> format. If also S2 and S8
+records appear, the format is also called <strong>Motorola
+Exormax</strong>.</p>
+
+<h3><a name="Intel hex-format">Intel hex-format</a></h3>
+
+<p>A file in the Intel hex-format is a text file containing
+hexadecimal encoded data, organised in so-called records: a text
+line in the following format:</p>
+
+<pre><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&lt;datacount&gt;&lt;address&gt;&lt;recordtype&gt;&lt;data&gt;&lt;checksum&gt;</tt></pre>
+
+<p>In which is:</p>
+
+<blockquote>
+    <dl>
+        <dt>':'</dt>
+        <dd>identifying character of the record;</dd>
+        <dt>&lt;datacount&gt;</dt>
+        <dd>hex-encoded byte representing the number of data
+            bytes in the record;</dd>
+        <dt>&lt;address&gt;</dt>
+        <dd>hex-encoded 2-byte address;</dd>
+        <dt>&lt;recordtype&gt;</dt>
+        <dd>hex-encoded byte representing the record type:</dd>
+        <dd><dl>
+                <dt>'00':</dt>
+                <dd><em>data record</em> (like the Motorola
+                    record type &quot;S1&quot;);</dd>
+                <dt>'01':</dt>
+                <dd><em>termination record</em> (like the
+                    Motorola record type &quot;S9&quot;);</dd>
+                <dt>'02':</dt>
+                <dd><em>segment base address record</em>, the
+                    first word of data of this record used as
+                    Segment Base Address of the addresses of the
+                    next data records; actual addresses are
+                    calculated as:</dd>
+                <dd>start address := (SegmentBaseAddress*16) +
+                    record start address;</dd>
+                <dt>'04':</dt>
+                <dd>unknown record-type, the first word of data
+                    of this record is interpreted by Binex as
+                    Segment Address, the most significant word of
+                    the addresses of the next data records;
+                    actual addresses are calculated as:</dd>
+                <dd>start address := (SegmentAddress*65536) +
+                    record start address;</dd>
+            </dl>
+        </dd>
+        <dt>&lt;data&gt;</dt>
+        <dd>hex-encoded data bytes (maximum 255);</dd>
+        <dt>&lt;checksum&gt;</dt>
+        <dd>two's complement of the sum of all bytes in the
+            record after the identifying character. Apart from
+            the correct hex-encoding Binex checks this checksum
+            in input files.</dd>
+    </dl>
+</blockquote>
+
+<p>Files with only 00, and 01 records are called to be in <strong>Intel
+&quot;Intellec&quot; 8/MDS</strong> format. The <strong>Intel
+MCS86 (Intellec 86)</strong> format adds the 02 type records to
+that.</p>
+
+<h3><a name="Symbol table">Symbol table</a></h3>
+
+<p>A hex file may contain a modular symbol table. The format of
+this table is:</p>
+
+<pre><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $$ &lt;module&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;label&gt; &lt;address&gt; &lt;label&gt; &lt;address&gt; ...
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;label&gt; &lt;address&gt; &lt;label&gt; &lt;address&gt; ...
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $$</tt></pre>
+
+<p>A line starting with two '$'-signs contains the name of the
+module. This line precedes one or more lines starting with two
+spaces and containing pairs of label names followed by the
+corresponding address. Address values are hexadecimal encoded and
+are preceded by a '$'-sign. Lines are normally no longer than 80
+characters. Each table may contain several modules. Every label
+is always inside a module block. The table ends with an empty
+module name specifier (just two '$'-signs).</p>
+
+<h3><a name="Comment">Comment</a></h3>
+
+<p>Apart from the hex records and a symbol table, a hex file may
+contain any kind of text lines. These are just skipped by Binex
+when read in, exept for lines that start with a semicolon
+&quot;;&quot;. These are taken to be comment to the accompanying
+data and they are preserved while copying hex files. All comment
+lines are output at the beginning of the hex file. (Not in this
+version of Binex yet.)</p>
+
+<hr noshade>
+
+<h2>ERROR <a name="MESSAGES">MESSAGES</a> AND EXCEPTIONS</h2>
+
+<p>The <strong>error messages</strong> that notify the various
+exceptions that might occur during the execution of Binex are
+supposed to speak for themselves.</p>
+
+<p>The first line of a message states the class of the exception,
+the name of the module (Binex), and the program address it
+occurred. This information is a bit detailed and not very useful
+to the ordinary user, but you get it anyway.</p>
+
+<p>The second line of the message actually describes the nature
+of the exception and many times includes some data that clarifies
+the error, e.g. the name of a file that could not be opened.</p>
+
+<p>Oddly enough, the error message is not output via the <em>standard
+error</em> channel, but via the <em>standard output</em> channel.
+That means, the message is written to a file instead of the
+console, if you redirect <em>standard output</em> to a file.</p>
+
+<p>Whenever Binex does not normally terminate, it's <strong>exit
+code</strong> is non-zero. This normally signals an enclosing
+makefile to abort further processing. In a DOS batch file this
+can be used via an errorlevel test:</p>
+
+<pre>	binex %1 %2 %3 %4 %5
+	if errorlevel 1 goto errorhandling</pre>
+
+<p>To alert the user to the anomaly, a message <strong>beep</strong>
+might sound if your system has any audio equipment enabled.</p>
+
+<hr noshade>
+
+<h2><a name="GLOSSARY">GLOSSARY</a></h2>
+
+<table border="0" cellpadding="4" cellspacing="1">
+    <tr>
+        <th align="left" valign="top"><a name="ASCII">ASCII</a></th>
+        <td>American Standard Code for Information Interchange</td>
+    </tr>
+    <tr>
+        <th align="left" valign="top"><a name="DOS">DOS</a></th>
+        <td>Disk Operating System (originally QDOS: Quick and
+        Dirty Operating System)</td>
+    </tr>
+    <tr>
+        <th align="left" valign="top"><a name="EPROM">[E]EPROM</a></th>
+        <td>[Electrical] Erasable Programmable Read Only Memory</td>
+    </tr>
+    <tr>
+        <th align="left" valign="top"><a name="EPLD">EPLD</a></th>
+        <td>Erasable Programmable Logic Device</td>
+    </tr>
+    <tr>
+        <th align="left" valign="top"><a name="PC">PC</a></th>
+        <td>Personal Computer</td>
+    </tr>
+    <tr>
+        <th align="left" valign="top"><a name="Windows">Windows</a></th>
+        <td>Windows Operating System, some more sophisticated
+        looking DOS</td>
+    </tr>
+    <tr>
+        <th align="left" valign="top">&nbsp;</th>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <th align="left" valign="top">&nbsp;</th>
+        <td>&nbsp;</td>
+    </tr>
+</table>
+
+<hr noshade>
+
+<h2><a name="COLOPHON">COLOPHON</a></h2>
+
+<table border="0" cellpadding="4" cellspacing="1">
+    <tr>
+        <th align="left" valign="top">program:</th>
+        <td>Binex V2.00</td>
+    </tr>
+    <tr>
+        <th align="left" valign="top">operating system:</th>
+        <td>Microsoft Windows 95, Windows 98, or Windows NT</td>
+    </tr>
+    <tr>
+        <th align="left" valign="top">application:</th>
+        <td>console application</td>
+    </tr>
+    <tr>
+        <th align="left" valign="top">memory requirements:</th>
+        <td>200 kbyte for installation</td>
+    </tr>
+    <tr>
+        <th align="left" valign="top">author:</th>
+        <td><a
+        href="mailto:EKHvanderPols@compuserve.com?subject=Binex">Ernst
+        van der Pols</a>, Zuidland, Nederland</td>
+    </tr>
+    <tr>
+        <th align="left" valign="top">development platform:</th>
+        <td>Borland Delphi 2.0</td>
+    </tr>
+</table>
+
+<hr noshade>
+
+<p><font size="2"><em>Binex Manual / <!--webbot bot="Timestamp"
+startspan s-type="EDITED" s-format="%Y.%m.%d" -->1999.10.24<!--webbot
+bot="Timestamp" i-checksum="12265" endspan --> / Copyright
+NewLife Software, E.K.H. van der Pols, Zuidland, Holland</em></font></p>
+</body>
+</html>
